@@ -52,7 +52,7 @@ class UIContactIntegrationsTabSubscriber implements EventSubscriberInterface
         //var_dump($event->getViewName());
 
         if ($event->checkContext('MauticLeadBundle:Lead:lead.html.php','tabs')){
-            $content = '<li class=""><a href="#ecommerce-container" role="tab" data-toggle="tab">Ecommerce</a></li>';
+            $content = '<li class=""><a href="#ecommerce-container" role="tab" data-toggle="tab">eCommerce</a></li>';
             $event->addContent($content);
          }
 

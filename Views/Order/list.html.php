@@ -162,7 +162,7 @@ if ('index' == $tmpl) {
         ); ?>
     </div>
 <?php else: ?>
-    <?php echo $view->render('MauticCoreBundle:Helper:noresults.html.php', ['tip' => 'mautic.ecommerce.noresults.tip']); ?>
+    <?php echo $view->render('MauticCoreBundle:Helper:noresults.html.php', ['tip' => 'mautic.ecommerce.order.noresults.tip']); ?>
 <?php endif; ?>
 
 <?php echo $view->render(

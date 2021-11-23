@@ -51,7 +51,7 @@ if ('index' == $tmpl) {
                         'class'      => 'visible-md visible-lg col-asset-category',
                     ]
                 );
-                                
+
                 echo $view->render(
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
@@ -157,7 +157,7 @@ if ('index' == $tmpl) {
         ); ?>
     </div>
 <?php else: ?>
-    <?php echo $view->render('MauticCoreBundle:Helper:noresults.html.php', ['tip' => 'mautic.ecommerce.noresults.tip']); ?>
+    <?php echo $view->render('MauticCoreBundle:Helper:noresults.html.php', ['tip' => 'mautic.ecommerce.product.noresults.tip']); ?>
 <?php endif; ?>
 
 <?php echo $view->render(
