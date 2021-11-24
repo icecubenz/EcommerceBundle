@@ -1,5 +1,5 @@
 //EcommerceBundle
-mautic.ecommerceOnLoad = function (container, response) {
+Mautic.ecommerceOnLoad = function (container, response) {
 
     if (mQuery(container + ' #list-search').length) {
         Mautic.activateSearchAutocomplete('list-search', 'product.product');
