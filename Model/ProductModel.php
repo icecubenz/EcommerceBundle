@@ -96,9 +96,9 @@ class ProductModel extends FormModel{
               ->setParameter('userId', $this->userHelper->getUser()->getId());
         }
 
-        $data = $query->loadAndBuildTimeData($q);
+        //$data = $query->loadAndBuildTimeData($q);
 
-        $chart->setDataset($this->translator->trans('mautic.ecommerce.graph.product.line.views'), $data);
+        //$chart->setDataset($this->translator->trans('mautic.ecommerce.graph.product.line.views'), $data);
 
         $q     = $query->prepareTimeDataQuery('order_rows', 'date_add', $filter);
 

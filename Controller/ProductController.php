@@ -81,7 +81,7 @@ class ProductController extends AbstractStandardFormController
                 new \DateTime($dateRangeForm->get('date_from')->getData()),
                 new \DateTime($dateRangeForm->get('date_to')->getData()),
                 null,
-                ['product_Id' => $item->getProductId()]
+                ['product_id' => $item->getProductId()]
             );
 
             $args['viewParameters']['stats']         = $stats;
