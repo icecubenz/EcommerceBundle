@@ -11,24 +11,23 @@ return array(
                 'id'        => 'mautic_ecommerce_root',
                 'iconClass' => 'fa-shopping-cart',
                 'priority'  => 65,
-            ],
-            'mautic.ecommerce.products' => [
-                'route'    => 'mautic_product_index',
-                'access'   => 'ecommerce:products:view',
-                'parent'   => 'mautic.ecommerce',
-                'priority' => 10,
-            ],
-            'mautic.ecommerce.carts' => [
-                'route'    => 'mautic_cart_index',
-                'access'   => 'ecommerce:carts:view',
-                'parent'   => 'mautic.ecommerce',
-                'priority' => 10,
-            ],
-            'mautic.ecommerce.orders' => [
-                'route'    => 'mautic_order_index',
-                'access'   => 'ecommerce:orders:view',
-                'parent'   => 'mautic.ecommerce',
-                'priority' => 10,
+                'children'  => [
+                    'mautic.ecommerce.products' => [
+                        'route'    => 'mautic_product_index',
+                        'access'   => 'ecommerce:products:view',
+                        'priority' => 30,
+                    ],
+                    'mautic.ecommerce.carts' => [
+                        'route'    => 'mautic_cart_index',
+                        'access'   => 'ecommerce:carts:view',
+                        'priority' => 20,
+                    ],
+                    'mautic.ecommerce.orders' => [
+                        'route'    => 'mautic_order_index',
+                        'access'   => 'ecommerce:orders:view',
+                        'priority' => 10,
+                    ],
+                ],
             ],
         ],
     ],
