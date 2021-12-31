@@ -15,12 +15,12 @@ return array(
                     'mautic.ecommerce.products' => [
                         'route'    => 'mautic_product_index',
                         'access'   => 'ecommerce:products:view',
-                        'priority' => 30,
+                        'priority' => 10,
                     ],
                     'mautic.ecommerce.carts' => [
                         'route'    => 'mautic_cart_index',
                         'access'   => 'ecommerce:carts:view',
-                        'priority' => 20,
+                        'priority' => 10,
                     ],
                     'mautic.ecommerce.orders' => [
                         'route'    => 'mautic_order_index',

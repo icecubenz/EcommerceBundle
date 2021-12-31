@@ -13,16 +13,6 @@ class EcommercePermissions extends AbstractPermissions
     /**
      * {@inheritdoc}
      */
-    public function __construct($params)
-    {
-        parent::__construct($params);
-        $this->addExtendedPermissions('products');
-        $this->addStandardPermissions('categories');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'ecommerce';
@@ -31,9 +21,20 @@ class EcommercePermissions extends AbstractPermissions
     /**
      * {@inheritdoc}
      */
+    public function definePermissions()
+    {
+        $this->addExtendedPermissions('products');
+        $this->addExtendedPermissions('carts');
+        $this->addExtendedPermissions('orders');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface &$builder, array $options, array $data)
     {
-        $this->addStandardFormFields('ecommerce', 'categories', $builder, $data);
         $this->addExtendedFormFields('ecommerce', 'products', $builder, $data);
+        $this->addExtendedFormFields('ecommerce', 'carts', $builder, $data);
+        $this->addExtendedFormFields('ecommerce', 'orders', $builder, $data);
     }
 }
