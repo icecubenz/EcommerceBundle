@@ -26,6 +26,7 @@ class EcommercePermissions extends AbstractPermissions
         $this->addExtendedPermissions('products');
         $this->addExtendedPermissions('carts');
         $this->addExtendedPermissions('orders');
+        $this->addStandardPermissions('googlefeed');
     }
 
     /**
@@ -36,5 +37,6 @@ class EcommercePermissions extends AbstractPermissions
         $this->addExtendedFormFields('ecommerce', 'products', $builder, $data);
         $this->addExtendedFormFields('ecommerce', 'carts', $builder, $data);
         $this->addExtendedFormFields('ecommerce', 'orders', $builder, $data);
+        $this->addStandardFormFields('ecommerce', 'googlefeed', $builder, $data);
     }
 }

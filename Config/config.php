@@ -27,6 +27,11 @@ return array(
                         'access'   => 'ecommerce:orders:view',
                         'priority' => 10,
                     ],
+                    'mautic.ecommerce.googlefeed' => [
+                        'route'    => 'mautic_googlefeed_index',
+                        'access'   => 'ecommerce:googlefeed:view',
+                        'priority' => 10,
+                    ],
                 ],
             ],
         ],
@@ -56,6 +61,10 @@ return array(
             'mautic_order_action' => [
                 'path'       => '/orders/{objectAction}/{objectId}',
                 'controller' => 'EcommerceBundle:Order:execute',
+            ],
+            'mautic_googlefeed_index' => [
+                'path'       => '/googlefeed/{page}',
+                'controller' => 'EcommerceBundle:Googlefeed:index',
             ],
         ],
         'api' => [
