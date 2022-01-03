@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Mautic\CoreBundle\Doctrine\Mapping\ClassMetadataBuilder;
 use Mautic\CoreBundle\Entity\FormEntity;
 
-class Feed extends FormEntity
+class Googlefeed extends FormEntity
 {
     private $id;
 
@@ -22,7 +22,9 @@ class Feed extends FormEntity
     {
         $builder = new ClassMetadataBuilder($metadata);
 
-        $builder->setTable('feed');
+        $builder->setTable('google_feed')
+            ->setCustomRepositoryClass(GooglefeedRepository::class);
+
         $builder->addId();
 
         $builder->createField('url', 'text')

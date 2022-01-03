@@ -87,6 +87,9 @@ return array(
             'mautic.order.model.order' => [
                 'class' => \MauticPlugin\EcommerceBundle\Model\OrderModel::class
             ],
+            'mautic.googlefeed.model.googlefeed' => [
+                'class' => \MauticPlugin\EcommerceBundle\Model\GooglefeedModel::class
+            ],
             'mautic.productcategory.model.productcategory' => [
                 'class' => \MauticPlugin\EcommerceBundle\Model\ProductCategoryModel::class
             ],
