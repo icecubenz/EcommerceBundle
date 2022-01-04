@@ -66,6 +66,10 @@ return array(
                 'path'       => '/googlefeed/{page}',
                 'controller' => 'EcommerceBundle:Googlefeed:index',
             ],
+            'mautic_googlefeed_action' => [
+                'path'       => '/googlefeed/{objectAction}/{objectId}',
+                'controller' => 'EcommerceBundle:Googlefeed:execute',
+            ],
         ],
         'api' => [
             'mautic_api_productstandard' => [
