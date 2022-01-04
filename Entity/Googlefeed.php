@@ -12,6 +12,8 @@ class Googlefeed extends FormEntity
 
     private $url;
 
+    private $status;
+
     private $shopId;
 
     private $userName;
@@ -31,6 +33,10 @@ class Googlefeed extends FormEntity
             ->columnName('url')
             ->build();
 
+        $builder->createField('status', 'integer')
+            ->columnName('status')
+            ->build();
+
         $builder->createField('shopId', 'integer')
             ->columnName('shop_id')
             ->nullable()
@@ -45,5 +51,60 @@ class Googlefeed extends FormEntity
             ->columnName('password')
             ->nullable()
             ->build();
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
+
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
+    }
+
+    public function getUserName()
+    {
+        return $this->userName;
+    }
+
+    public function setUserName($userName)
+    {
+        $this->userName = $userName;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
     }
 }
