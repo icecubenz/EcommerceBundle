@@ -13,6 +13,17 @@ if ('index' == $tmpl) {
                     echo $view->render(
                         'MauticCoreBundle:Helper:tableheader.html.php',
                         [
+                            'checkall'        => 'true',
+                            'target'          => '#googlefeedTable',
+                            'routeBase'       => 'googlefeed',
+                            'templateButtons' => [
+                                'delete' => $permissions['ecommerce:googlefeed:delete'],
+                            ],
+                        ]
+                    );
+                    echo $view->render(
+                        'MauticCoreBundle:Helper:tableheader.html.php',
+                        [
                             'sessionVar' => 'googlefeed',
                             'orderBy'    => 'gf.id',
                             'text'       => 'mautic.core.id',
@@ -24,7 +35,6 @@ if ('index' == $tmpl) {
                         [
                             'sessionVar' => 'googlefeed',
                             'text'       => 'mautic.ecommerce.url',
-                            //'default'    => true,
                         ]
                     );
                     echo $view->render(
@@ -43,20 +53,36 @@ if ('index' == $tmpl) {
                             'text'       => 'mautic.ecommerce.date',
                         ]
                     );
-                    echo $view->render(
-                        'MauticCoreBundle:Helper:tableheader.html.php',
-                        [
-                            'sessionVar' => 'googlefeed',
-                            'text'       => 'mautic.ecommerce.action',
-                            //'default'    => true,
-                        ]
-                    );
                 ?>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($items as $k => $item): ?>
                 <tr>
+                    <td class="">
+                        <?php
+                        echo $view->render(
+                            'MauticCoreBundle:Helper:list_actions.html.php',
+                            [
+                                'item'            => $item,
+                                'templateButtons' => [
+                                    'edit'   => $view['security']->hasEntityAccess(
+                                        $permissions['ecommerce:googlefeed:editown'],
+                                        $permissions['ecommerce:googlefeed:editother'],
+                                        $item->getCreatedBy()
+                                    ),
+                                    'delete' => $view['security']->hasEntityAccess(
+                                        $permissions['ecommerce:googlefeed:deleteown'],
+                                        $permissions['ecommerce:googlefeed:deleteother'],
+                                        $item->getCreatedBy()
+                                    ),
+                                ],
+                                'translationBase' => 'mautic.ecommerce.googlefeed',
+                                'routeBase'       => 'googlefeed',
+                            ]
+                        );
+                        ?>
+                    </td>
                     <td class="">
                         <span><?php echo $item->getId(); ?></span>
                     </td>
@@ -73,21 +99,7 @@ if ('index' == $tmpl) {
                         <?php endif; ?>
                     </td>
                     <td class="">
-                        <?php echo $item->getDateModified()->format('Y-m-d H:i:s'); ?>
-                    </td>
-                    <td class="">
-                        <?php
-                        $editUrl = $view['router']->path(
-                            'mautic_googlefeed_action',
-                            [
-                                'objectAction' => 'edit',
-                                'objectId' => $item->getId()
-                            ]
-                        );
-                        ?>
-                        <a href="<?php echo $editUrl; ?>" data-toggle="ajax">
-                            <span>Edit</span>
-                        </a>
+                        <?php echo $item->getDateAdded()->format('Y-m-d H:i:s'); ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

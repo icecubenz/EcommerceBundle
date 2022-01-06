@@ -107,4 +107,9 @@ class Googlefeed extends FormEntity
     {
         $this->password = $password;
     }
+
+    public function getTitle()
+    {
+        return 'Google Feed';
+    }
 }

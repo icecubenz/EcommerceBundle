@@ -4,6 +4,7 @@ namespace MauticPlugin\EcommerceBundle\Form\Type;
 
 use Mautic\CoreBundle\Form\EventListener\CleanFormSubscriber;
 use Mautic\CoreBundle\Form\EventListener\FormExitSubscriber;
+use Mautic\CoreBundle\Form\Type\FormButtonsType;
 use Mautic\CoreBundle\Form\Type\YesNoButtonGroupType;
 use MauticPlugin\EcommerceBundle\Entity\Googlefeed as GooglefeedEntity;
 use Symfony\Component\Form\AbstractType;
@@ -76,6 +77,14 @@ class GooglefeedType extends AbstractType
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => ['class' => 'form-control'],
                 'required'   => false,
+            ]
+        );
+
+        $builder->add(
+            'buttons',
+            FormButtonsType::class,
+            [
+                'pre_extra_buttons' => [],
             ]
         );
     }

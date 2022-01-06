@@ -25,6 +25,8 @@ class GooglefeedModel extends FormModel
             $entity = new Googlefeed();
             return $entity;
         }
+
+        return parent::getEntity($id);
     }
 
     public function createForm($entity, $formFactory, $action = null, $options = [])

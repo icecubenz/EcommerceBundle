@@ -30,4 +30,19 @@ class GooglefeedController extends AbstractStandardFormController
     {
         return parent::newStandard();
     }
+
+    public function editAction($objectId, $ignorePost = false)
+    {
+        return parent::editStandard($objectId, $ignorePost);
+    }
+
+    public function deleteAction($objectId)
+    {
+        return parent::deleteStandard($objectId);
+    }
+
+    public function batchDeleteAction()
+    {
+        return parent::batchDeleteStandard();
+    }
 }
