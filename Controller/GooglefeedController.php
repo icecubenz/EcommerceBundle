@@ -25,4 +25,9 @@ class GooglefeedController extends AbstractStandardFormController
     {
         return parent::indexStandard($page);
     }
+
+    public function newAction()
+    {
+        return parent::newStandard();
+    }
 }

@@ -24,7 +24,7 @@ if ('index' == $tmpl) {
                         [
                             'sessionVar' => 'googlefeed',
                             'text'       => 'mautic.ecommerce.url',
-                            'default'    => true,
+                            //'default'    => true,
                         ]
                     );
                     echo $view->render(
@@ -48,7 +48,7 @@ if ('index' == $tmpl) {
                         [
                             'sessionVar' => 'googlefeed',
                             'text'       => 'mautic.ecommerce.action',
-                            'default'    => true,
+                            //'default'    => true,
                         ]
                     );
                 ?>
