@@ -132,6 +132,15 @@ return array(
                     'mautic.order.model.order',
                 ],
             ]
-        ]
+        ],
+        'commands' => [
+            'mautic.ecommerce.command.googlefeed' => [
+                'tag'       => 'console.command',
+                'class'     => \MauticPlugin\EcommerceBundle\Command\GooglefeedCommand::class,
+                'arguments' => [
+                    'doctrine.orm.entity_manager',
+                ],
+            ],
+        ],
     ],
 );
