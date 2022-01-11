@@ -56,7 +56,7 @@ class Product extends FormEntity {
         $builder->createField('name', 'string')
             ->build();
 
-        $builder->createField('productId', 'integer')
+        $builder->createField('productId', 'string')
             ->columnName('product_id')
             ->build();
 
@@ -70,32 +70,33 @@ class Product extends FormEntity {
             ->nullable()
             ->build();
 
-        $builder->createField('taxPercent', 'float')
+        $builder->createField('taxPercent', 'string')
             ->columnName('tax_percent')
             ->nullable()
             ->build();
 
         $builder->createField('language', 'string')
             ->columnName('lang')
+            ->nullable()
             ->build();
 
-        $builder->createField('imageUrl', 'string')
+        $builder->createField('imageUrl', 'text')
             ->columnName('image_url')
             ->nullable()
             ->build();
 
-        $builder->createField('url', 'string')
+        $builder->createField('url', 'text')
             ->nullable()
             ->build();
 
         $builder->addCategory();
 
-        $builder->createField('shortDescription', 'string')
+        $builder->createField('shortDescription', 'text')
             ->columnName('short_description')
             ->nullable()
             ->build();
 
-        $builder->createField('price', 'float')
+        $builder->createField('price', 'string')
             ->nullable()
             ->build();
 
@@ -103,7 +104,7 @@ class Product extends FormEntity {
             ->nullable()
             ->build();
 
-        $builder->createField('longDescription', 'string')
+        $builder->createField('longDescription', 'text')
             ->columnName('long_description')
             ->nullable()
             ->build();
