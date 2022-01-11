@@ -3,7 +3,8 @@
   "description": "Ecommerce for Mautic",
   "type": "mautic-plugin",
   "require": {
-    "mautic/core-lib": "^4.0"
+    "mautic/core-lib": "^4.0",
+    "guzzlehttp/guzzle": "^7.2"
   },
   "extra": {
     "install-directory-name": "EcommerceBundle"
