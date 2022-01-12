@@ -31,19 +31,19 @@ $view['slots']->set('headerTitle', $item->getName());
                             ); ?>
                             <tr>
                                 <td width="20%"><span class="fw-b"><?php echo $view['translator']->trans(
-                                            'product.product.productId'
+                                            'mautic.ecommerce.externalId'
                                         ); ?></span></td>
                                 <td><?php echo $item->getProductId(); ?></td>
                             </tr>
                             <tr>
                                 <td width="20%"><span class="fw-b"><?php echo $view['translator']->trans(
-                                            'product.product.shopId'
+                                            'mautic.ecommerce.shopId'
                                         ); ?></span></td>
                                 <td><?php echo $item->getShopId(); ?></td>
                             </tr>
                             <tr>
                                 <td width="20%"><span class="fw-b"><?php echo $view['translator']->trans(
-                                            'product.product.productAttributeId'
+                                            'mautic.ecommerce.combinationid'
                                         ); ?></span></td>
                                 <td><?php echo $item->getProductAttributeId(); ?></td>
                             </tr>
@@ -102,7 +102,9 @@ $view['slots']->set('headerTitle', $item->getName());
         <div class="tab-content pa-md preview-detail">
             <div class="row">
                 <div class="col-md-6">
-                    <img src="<?php echo $view['assets']->getUrl('plugins/PrestashopEcommerceBundle/Assets/img/products/' . $item->getImageUrl()) ?>" alt="<?php echo $item->getName(); ?>" class="img-thumbnail" />
+                    <?php if ($item->getImageUrl()) : ?>
+                    <img src="<?php echo $item->getImageUrl() ?>" alt="<?php echo $item->getName(); ?>" class="img-thumbnail" />
+                    <?php endif; ?>
                 </div>
                 
                 <div class="col-md-6">
@@ -117,7 +119,13 @@ $view['slots']->set('headerTitle', $item->getName());
                     <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.longDescription'); ?></strong></h6>
                     <p><?php echo $item->getLongDescription(); ?></p>
                     <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.url'); ?></strong></h6>
-                    <p><?php echo $item->getUrl(); ?></p>
+                    <p>
+                        <?php if ($item->getUrl()) : ?>
+                        <a href="<?php echo $item->getUrl(); ?>" target="_blank">
+                            <?php echo $item->getUrl(); ?>
+                        </a>
+                        <?php endif; ?>
+                    </p>
                 </div>
             </div>
         </div>

@@ -98,15 +98,15 @@ if ('index' == $tmpl) {
             <?php foreach ($items as $k => $item): ?>
                 <tr>
                     <td class="">
-
+                        <?php if ($item->getImageUrl()) : ?>
                         <a href="<?php echo $view['router']->path(
                             'mautic_product_action',
                             ['objectAction' => 'view', 'objectId' => $item->getId()]
                         ); ?>" data-toggle="ajax"
                            >
-                            <img src="<?php echo $view['assets']->getUrl('plugins/PrestashopEcommerceBundle/Assets/img/products/' . $item->getImageUrl()) ?>" alt="<?php echo $item->getName(); ?>" class="img-thumbnail" style="max-width: 100px; display: block; margin: auto"/>
+                            <img src="<?php echo $item->getImageUrl() ?>" alt="<?php echo $item->getName(); ?>" class="img-thumbnail" style="max-width: 100px; display: block; margin: auto"/>
                         </a>
-
+                        <?php endif; ?>
                     </td>
                     <td>
                         <div>
