@@ -53,7 +53,7 @@ class Product extends FormEntity {
 
         $builder->addId();
 
-        $builder->createField('name', 'string')
+        $builder->createField('name', 'text')
             ->build();
 
         $builder->createField('productId', 'string')
