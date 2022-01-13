@@ -17,6 +17,8 @@ class Cart extends FormEntity
 
     private $cartId;
 
+    private $cartUrl;
+
     private $shopId;
 
     private $carrierId;
@@ -58,6 +60,11 @@ class Cart extends FormEntity
 
         $builder->createField('cartId', 'integer')
             ->columnName('cart_id')
+            ->build();
+
+        $builder->createField('cartUrl', 'text')
+            ->columnName('cart_url')
+            ->nullable()
             ->build();
 
         $builder->createField('shopId', 'integer')
@@ -133,6 +140,16 @@ class Cart extends FormEntity
     public function setCartId($cartId)
     {
         $this->cartId = $cartId;
+    }
+
+    public function getCartUrl()
+    {
+        return $this->cartUrl;
+    }
+
+    public function setCartUrl($url)
+    {
+        $this->cartUrl = $url;
     }
 
     public function getShopId()

@@ -76,19 +76,19 @@ class ProductCategory{
             ->addJoinColumn('parent_id', 'id', true, false)
             ->build();
 
-        $builder->createManyToMany('products', 'Product')
+        /*$builder->createManyToMany('products', 'Product')
             ->setJoinTable('product_category_products')
             ->addInverseJoinColumn('product_id', 'id', false)
-            ->build();
+            ->build();*/
 
         $builder->createField('language', 'string')
             ->columnName('lang')
             ->build();
 
-        $builder->createManyToMany('children', 'ProductCategory')
+        /*$builder->createManyToMany('children', 'ProductCategory')
             ->setJoinTable('product_category_childrens')
             ->addInverseJoinColumn('children_id', 'id', false)
-            ->build();
+            ->build();*/
     }
 
     public function getId()
