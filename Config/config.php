@@ -131,7 +131,13 @@ return array(
                     'mautic.cart.model.cart',
                     'mautic.order.model.order',
                 ],
-            ]
+            ],
+            'mautic.ecommerce.emailbundle.product' => [
+                'class'     => \MauticPlugin\EcommerceBundle\EventListener\ProductSubscriber::class,
+                'arguments' => [
+                    'doctrine.orm.entity_manager',
+                ],
+            ],
         ],
         'commands' => [
             'mautic.ecommerce.command.googlefeed' => [
