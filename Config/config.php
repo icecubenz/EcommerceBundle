@@ -138,6 +138,13 @@ return array(
                     'doctrine.orm.entity_manager',
                 ],
             ],
+            'mautic.ecommerce.emailbundle.cart' => [
+                'class'     => \MauticPlugin\EcommerceBundle\EventListener\CartSubscriber::class,
+                'arguments' => [
+                    'doctrine.orm.entity_manager',
+                    'mautic.lead.model.lead',
+                ],
+            ],
         ],
         'commands' => [
             'mautic.ecommerce.command.googlefeed' => [
