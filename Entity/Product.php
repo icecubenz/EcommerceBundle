@@ -15,125 +15,131 @@ class Product extends FormEntity {
 
     private $name;
 
-    private $productId;
+    private $product_id;
 
-    private $productAttributeId;
-
-    private $shopId;
-
-    private $imageUrl;
-
-    private $url;
-
-    private $category;
-
-    private $shortDescription;
+    private $store_id;
 
     private $price;
 
-    private $reference;
+    private $sale_price;
 
-    private $longDescription;
+    private $tax_rate;
 
-    private $type;
+    private $image_url;
 
-    private $taxPercent;
+    private $url;
 
-    private $language = 'en';
+    private $short_description;
+
+    private $description;
+
+    private $mpn;
+
+    private $brand;
+
+    private $availability;
+
+    private $availability_date;
 
     public static function loadMetadata(ORM\ClassMetadata $metadata): void
     {
         $builder = new ClassMetadataBuilder($metadata);
 
         $builder
-            ->setTable('products')
+            ->setTable('ecommerce_products')
             ->setCustomRepositoryClass(ProductRepository::class)
-            ->addIndex(['product_id'], 'productId')
-            ->addUniqueConstraint(['product_id', 'shop_id','product_attribute_id','lang'], 'unique_product');
+            ->addIndex(['product_id'], 'product_id')
+            ->addUniqueConstraint(['product_id', 'store_id'], 'unique_product');
 
         $builder->addId();
 
         $builder->createField('name', 'text')
+            ->columnName('name')
             ->build();
 
-        $builder->createField('productId', 'string')
+        $builder->createField('product_id', 'string')
             ->columnName('product_id')
             ->build();
 
-        $builder->createField('productAttributeId', 'integer')
-            ->columnName('product_attribute_id')
+        $builder->createField('store_id', 'integer')
+            ->columnName('store_id')
+            ->build();
+
+        $builder->createField('price', 'string')
+            ->columnName('price')
             ->nullable()
             ->build();
 
-        $builder->createField('shopId', 'integer')
-            ->columnName('shop_id')
+        $builder->createField('sale_price', 'string')
+            ->columnName('sale_price')
             ->nullable()
             ->build();
 
-        $builder->createField('taxPercent', 'string')
-            ->columnName('tax_percent')
+        $builder->createField('tax_rate', 'string')
+            ->columnName('tax_rate')
             ->nullable()
             ->build();
 
-        $builder->createField('language', 'string')
-            ->columnName('lang')
-            ->nullable()
-            ->build();
-
-        $builder->createField('imageUrl', 'text')
+        $builder->createField('image_url', 'text')
             ->columnName('image_url')
             ->nullable()
             ->build();
 
         $builder->createField('url', 'text')
+            ->columnName('url')
             ->nullable()
             ->build();
 
-        $builder->addCategory();
-
-        $builder->createField('shortDescription', 'text')
+        $builder->createField('short_description', 'text')
             ->columnName('short_description')
             ->nullable()
             ->build();
 
-        $builder->createField('price', 'string')
+        $builder->createField('description', 'text')
+            ->columnName('description')
             ->nullable()
             ->build();
 
-        $builder->createField('reference', 'string')
+        $builder->createField('mpn', 'string')
+            ->columnName('mpn')
             ->nullable()
             ->build();
 
-        $builder->createField('longDescription', 'text')
-            ->columnName('long_description')
+        $builder->createField('brand', 'string')
+            ->columnName('brand')
+            ->nullable()
+            ->build();
+
+        $builder->createField('availability', 'string')
+            ->columnName('availability')
+            ->nullable()
+            ->build();
+
+        $builder->createField('availability_date', 'string')
+            ->columnName('availability_date')
             ->nullable()
             ->build();
     }
 
     public static function loadApiMetadata(ApiMetadataDriver $metadata)
     {
-        $metadata->setGroupPrefix('product')
-            ->addListProperties(
+        $metadata->addProperties(
                 [
                     'id',
                     'name',
-                    'category',
-                    'shopId',
-                    'productId',
-                    'language',
-                ]
-            )
-            ->addProperties(
-                [
-                    'url',
-                    'publishUp',
-                    'publishDown',
-                    'productAttributeId',
-                    'reference',
+                    'product_id',
+                    'store_id',
                     'price',
-                    'imageUrl',
-                    'shortDescription',
-                    'longDescription',
+                    'sale_price',
+                    'tax_rate',
+                    'image_url',
+                    'url',
+                    'short_description',
+                    'description',
+                    'mpn',
+                    'brand',
+                    'availability',
+                    'availability_date',
                 ]
             )
             ->build();
@@ -156,72 +162,22 @@ class Product extends FormEntity {
 
     public function getProductId()
     {
-        return $this->productId;
+        return $this->product_id;
     }
 
     public function setProductId($productId)
     {
-        $this->productId = $productId;
+        $this->product_id = $productId;
     }
 
-    public function getProductAttributeId()
+    public function getStoreId()
     {
-        return $this->productAttributeId;
+        return $this->store_id;
     }
 
-    public function setProductAttributeId($productAttributeId)
+    public function setStoreId($storeId)
     {
-        $this->productAttributeId = $productAttributeId;
-    }
-
-    public function getShopId()
-    {
-        return $this->shopId;
-    }
-
-    public function setShopId($shopId)
-    {
-        $this->shopId = $shopId;
-    }
-
-    public function getImageUrl()
-    {
-        return $this->imageUrl;
-    }
-
-    public function setImageUrl($imageUrl)
-    {
-        $this->imageUrl = $imageUrl;
-    }
-
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    public function setCategory($category)
-    {
-        $this->category = $category;
-    }
-
-    public function getShortDescription()
-    {
-        return $this->shortDescription;
-    }
-
-    public function setShortDescription($shortDescription)
-    {
-        $this->shortDescription = $shortDescription;
+        $this->store_id = $storeId;
     }
 
     public function getPrice()
@@ -234,53 +190,103 @@ class Product extends FormEntity {
         $this->price = $price;
     }
 
-    public function getReference()
+    public function getSalePrice()
     {
-        return $this->reference;
+        return $this->sale_price;
     }
 
-    public function setReference($reference)
+    public function setSalePrice($price)
     {
-        $this->reference = $reference;
+        $this->sale_price = $price;
     }
 
-    public function getLongDescription()
+    public function setTaxRate($rate)
     {
-        return $this->longDescription;
+        $this->tax_rate = $rate;
     }
 
-    public function setLongDescription($longDescription)
+    public function getTaxRate()
     {
-        $this->longDescription = $longDescription;
+        return $this->tax_rate;
     }
 
-    public function getType()
+    public function getImageUrl()
     {
-        return $this->type;
+        return $this->image_url;
     }
 
-    public function setLanguage($language)
+    public function setImageUrl($imageUrl)
     {
-        $this->isChanged('language', $language);
-        $this->language = $language;
-
-        return $this;
+        $this->image_url = $imageUrl;
     }
 
-    public function getLanguage()
+    public function getUrl()
     {
-        return $this->language;
+        return $this->url;
     }
 
-    public function setTaxPercent($taxPercent)
+    public function setUrl($url)
     {
-        $this->taxPercent = $taxPercent;
-
-        return $this;
+        $this->url = $url;
     }
 
-    public function getTaxPercent()
+    public function getShortDescription()
     {
-        return $this->taxPercent;
+        return $this->short_description;
+    }
+
+    public function setShortDescription($shortDescription)
+    {
+        $this->short_description = $shortDescription;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    public function getMpn()
+    {
+        return $this->mpn;
+    }
+
+    public function setMpn($mpn)
+    {
+        $this->mpn = $mpn;
+    }
+
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
+    }
+
+    public function getAvailability()
+    {
+        return $this->availability;
+    }
+
+    public function setAvailability($status)
+    {
+        $this->availability = $status;
+    }
+
+    public function getAvailabilityDate()
+    {
+        return $this->availability_date;
+    }
+
+    public function setAvailabilityDate($date)
+    {
+        $this->availability_date = $date;
     }
 }
