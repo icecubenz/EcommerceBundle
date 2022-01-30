@@ -100,10 +100,10 @@ class ProductModel extends FormModel{
 
         //$chart->setDataset($this->translator->trans('mautic.ecommerce.graph.product.line.views'), $data);
 
-        $q     = $query->prepareTimeDataQuery('order_rows', 'date_add', $filter);
+        //$q     = $query->prepareTimeDataQuery('order_rows', 'date_add', $filter);
 
-        $data2 = $query->loadAndBuildTimeData($q);
-        $chart->setDataset($this->translator->trans('mautic.ecommerce.graph.product.line.sales'), $data2);
+        //$data2 = $query->loadAndBuildTimeData($q);
+        //$chart->setDataset($this->translator->trans('mautic.ecommerce.graph.product.line.sales'), $data2);
         return $chart->render();
     }
 }

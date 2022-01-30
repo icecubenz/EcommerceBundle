@@ -87,9 +87,9 @@ class ProductController extends AbstractStandardFormController
             $args['viewParameters']['stats']         = $stats;
             $args['viewParameters']['dateRangeForm'] = $dateRangeForm->createView();
 
-            if ('link' == $item->getType()) {
+            /*if ('link' == $item->getType()) {
                 $args['viewParameters']['trackables'] = $this->getModel('page.trackable')->getTrackableList('product', $item->getId());
-            }
+            }*/
         }
 
         return $args;

@@ -35,9 +35,9 @@ if ('index' == $tmpl) {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'product',
-                        'orderBy'    => 'p.name',
-                        'text'       => 'mautic.core.name',
-                        'class'      => 'col-product-name',
+                        'orderBy'    => 'p.product_id',
+                        'text'       => 'mautic.ecommerce.product.product_id',
+                        'class'      => 'visible-md visible-lg col-asset-id',
                         'default'    => true,
                     ]
                 );
@@ -46,9 +46,9 @@ if ('index' == $tmpl) {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'product',
-                        'orderBy'    => 'p.reference',
-                        'text'       => 'mautic.ecommerce.reference',
-                        'class'      => 'visible-md visible-lg col-asset-category',
+                        'orderBy'    => 'p.name',
+                        'text'       => 'mautic.core.name',
+                        'class'      => 'col-product-name',
                     ]
                 );
 
@@ -56,9 +56,9 @@ if ('index' == $tmpl) {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'product',
-                        'orderBy'    => 'c.title',
-                        'text'       => 'mautic.core.category',
-                        'class'      => 'visible-md visible-lg col-asset-category',
+                        'orderBy'    => 'p.price',
+                        'text'       => 'mautic.ecommerce.product.price',
+                        'class'      => 'col-product-mpn',
                     ]
                 );
 
@@ -66,9 +66,9 @@ if ('index' == $tmpl) {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'product',
-                        'orderBy'    => 'p.productId',
-                        'text'       => 'mautic.ecommerce.externalId',
-                        'class'      => 'visible-md visible-lg col-asset-id',
+                        'orderBy'    => 'p.sale_price',
+                        'text'       => 'mautic.ecommerce.product.sale_price',
+                        'class'      => 'col-product-mpn',
                     ]
                 );
 
@@ -76,9 +76,9 @@ if ('index' == $tmpl) {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'product',
-                        'orderBy'    => 'p.id',
-                        'text'       => 'mautic.ecommerce.combinationid',
-                        'class'      => 'visible-md visible-lg',
+                        'orderBy'    => 'p.mpn',
+                        'text'       => 'mautic.ecommerce.product.mpn',
+                        'class'      => 'col-product-mpn',
                     ]
                 );
 
@@ -86,8 +86,8 @@ if ('index' == $tmpl) {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'product',
-                        'orderBy'    => 'p.id',
-                        'text'       => 'mautic.core.id',
+                        'orderBy'    => 'p.store_id',
+                        'text'       => 'mautic.ecommerce.product.store_id',
                         'class'      => 'visible-md visible-lg col-asset-id',
                     ]
                 );
@@ -108,6 +108,7 @@ if ('index' == $tmpl) {
                         </a>
                         <?php endif; ?>
                     </td>
+                    <td class="visible-md visible-lg"><?php echo $item->getProductId(); ?></td>
                     <td>
                         <div>
                             <a href="<?php echo $view['router']->path(
@@ -124,19 +125,10 @@ if ('index' == $tmpl) {
                             </div>
                         <?php endif; ?>
                     </td>
-                    <td class="visible-md visible-lg">
-                        <?php $reference = $item->getReference(); ?>
-                        <span><?php echo $reference; ?></span></span>
-                    </td>
-                    <td class="visible-md visible-lg">
-                        <?php $category = $item->getCategory(); ?>
-                        <?php $catName  = ($category) ? $category->getTitle() : $view['translator']->trans('mautic.core.form.uncategorized'); ?>
-                        <?php $color    = ($category) ? '#'.$category->getColor() : 'inherit'; ?>
-                        <span style="white-space: nowrap;"><span class="label label-default pa-4" style="border: 1px solid #d5d5d5; background: <?php echo $color; ?>;"> </span> <span><?php echo $catName; ?></span></span>
-                    </td>
-                    <td class="visible-md visible-lg"><?php echo $item->getProductId(); ?></td>
-                    <td class="visible-md visible-lg"><?php echo $item->getProductAttributeId(); ?></td>
-                    <td class="visible-md visible-lg"><?php echo $item->getId(); ?></td>
+                    <td class="visible-md visible-lg"><?php echo $item->getPrice(); ?></td>
+                    <td class="visible-md visible-lg"><?php echo $item->getSalePrice(); ?></td>
+                    <td class="visible-md visible-lg"><?php echo $item->getMpn(); ?></td>
+                    <td class="visible-md visible-lg"><?php echo $item->getStoreId(); ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

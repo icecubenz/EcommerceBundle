@@ -31,21 +31,21 @@ $view['slots']->set('headerTitle', $item->getName());
                             ); ?>
                             <tr>
                                 <td width="20%"><span class="fw-b"><?php echo $view['translator']->trans(
-                                            'mautic.ecommerce.externalId'
+                                            'mautic.ecommerce.product.product_id'
                                         ); ?></span></td>
                                 <td><?php echo $item->getProductId(); ?></td>
                             </tr>
                             <tr>
                                 <td width="20%"><span class="fw-b"><?php echo $view['translator']->trans(
-                                            'mautic.ecommerce.shopId'
+                                            'mautic.ecommerce.product.mpn'
                                         ); ?></span></td>
-                                <td><?php echo $item->getShopId(); ?></td>
+                                <td><?php echo $item->getMpn(); ?></td>
                             </tr>
                             <tr>
                                 <td width="20%"><span class="fw-b"><?php echo $view['translator']->trans(
-                                            'mautic.ecommerce.combinationid'
+                                            'mautic.ecommerce.product.store_id'
                                         ); ?></span></td>
-                                <td><?php echo $item->getProductAttributeId(); ?></td>
+                                <td><?php echo $item->getStoreId(); ?></td>
                             </tr>
                             </tbody>
                         </table>
@@ -67,7 +67,7 @@ $view['slots']->set('headerTitle', $item->getName());
             </div>
             <!--/ asset detail collapseable toggler -->
 
-            <!-- some stats -->
+            <!-- some stats --><!--
             <div class="pa-md">
                 <div class="row">
                     <div class="col-sm-12">
@@ -91,7 +91,7 @@ $view['slots']->set('headerTitle', $item->getName());
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <!--/ stats -->
 
         </div>
@@ -108,16 +108,28 @@ $view['slots']->set('headerTitle', $item->getName());
                 </div>
                 
                 <div class="col-md-6">
-                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.reference'); ?></strong></h6>
-                    <p><?php echo $item->getReference(); ?></p>
-                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.shortDescription'); ?></strong></h6>
-                    <p><?php echo $item->getShortDescription(); ?></p>
-                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.price'); ?></strong></h6>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.price'); ?></strong></h6>
                     <p><?php echo '$ ' .number_format($item->getPrice(), 2); //TODO CURRENCY ?></p>
-                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.taxPercent'); ?></strong></h6>
-                    <p><?php echo '% ' . $item->getTaxPercent(); ?></p>
-                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.longDescription'); ?></strong></h6>
-                    <p><?php echo $item->getLongDescription(); ?></p>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.sale_price'); ?></strong></h6>
+                    <p>
+                    <?php if ($item->getSalePrice()): ?>
+                    <?php echo '$ ' .number_format($item->getSalePrice(), 2); //TODO CURRENCY ?>
+                    <?php endif; ?>
+                    </p>
+                    <p>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.tax_rate'); ?></strong></h6>
+                    <?php if ($item->getTaxRate()): ?>
+                    <?php echo '% ' . $item->getTaxRate(); ?>
+                    <?php endif; ?>
+                    </p>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.shortDescription'); ?></strong></h6>
+                    <p>
+                    <?php if ($item->getShortDescription()): ?>
+                    <?php echo $item->getShortDescription(); ?>
+                    <?php endif; ?>
+                    </p>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.description'); ?></strong></h6>
+                    <p><?php echo $item->getDescription(); ?></p>
                     <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.url'); ?></strong></h6>
                     <p>
                         <?php if ($item->getUrl()) : ?>

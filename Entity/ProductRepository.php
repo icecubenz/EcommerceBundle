@@ -13,28 +13,11 @@ class ProductRepository extends CommonRepository
     {
          $q = $this
             ->createQueryBuilder('p')
-            ->select('p')
-            ->leftJoin('p.category', 'c');
+            ->select('p');
 
         $args['qb'] = $q;
 
         return parent::getEntities($args);
-    }
-
-    public function saveEntity($entity, $flush = true)
-    {
-        if($entity->getShopId() == null){
-            $entity->setShopId(0);
-        }
-        if($entity->getProductAttributeId() == null){
-            $entity->setProductAttributeId(0);
-        }
-
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush($entity);
-        }
     }
 
     public function getProductList($search = '', $limit = 10, $start = 0, $viewOther = false)
