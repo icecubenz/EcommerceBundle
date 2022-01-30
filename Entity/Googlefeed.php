@@ -14,9 +14,9 @@ class Googlefeed extends FormEntity
 
     private $status;
 
-    private $shopId;
+    private $store_id = 0;
 
-    private $userName;
+    private $username;
 
     private $password;
 
@@ -24,7 +24,7 @@ class Googlefeed extends FormEntity
     {
         $builder = new ClassMetadataBuilder($metadata);
 
-        $builder->setTable('google_feed')
+        $builder->setTable('ecommerce_google_feed')
             ->setCustomRepositoryClass(GooglefeedRepository::class);
 
         $builder->addId();
@@ -37,13 +37,12 @@ class Googlefeed extends FormEntity
             ->columnName('status')
             ->build();
 
-        $builder->createField('shopId', 'integer')
-            ->columnName('shop_id')
-            ->nullable()
+        $builder->createField('store_id', 'integer')
+            ->columnName('store_id')
             ->build();
 
-        $builder->createField('userName', 'string')
-            ->columnName('user_name')
+        $builder->createField('username', 'string')
+            ->columnName('username')
             ->nullable()
             ->build();
 
@@ -78,24 +77,24 @@ class Googlefeed extends FormEntity
         $this->status = $status;
     }
 
-    public function getShopId()
+    public function getStoreId()
     {
-        return $this->shopId;
+        return $this->store_id;
     }
 
-    public function setShopId($shopId)
+    public function setStoreId($id)
     {
-        $this->shopId = $shopId;
+        $this->store_id = $id;
     }
 
-    public function getUserName()
+    public function getUsername()
     {
-        return $this->userName;
+        return $this->username;
     }
 
-    public function setUserName($userName)
+    public function setUsername($username)
     {
-        $this->userName = $userName;
+        $this->username = $username;
     }
 
     public function getPassword()

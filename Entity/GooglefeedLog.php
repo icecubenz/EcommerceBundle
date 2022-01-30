@@ -12,13 +12,13 @@ class GooglefeedLog extends FormEntity
 
     private $message;
 
-    private $feedId;
+    private $feed_id;
 
     public static function loadMetadata(ORM\ClassMetadata $metadata): void
     {
         $builder = new ClassMetadataBuilder($metadata);
 
-        $builder->setTable('google_feed_log')
+        $builder->setTable('ecommerce_google_feed_log')
             ->setCustomRepositoryClass(GooglefeedLogRepository::class);
 
         $builder->addId();
@@ -27,7 +27,7 @@ class GooglefeedLog extends FormEntity
             ->columnName('message')
             ->build();
 
-        $builder->createField('feedId', 'integer')
+        $builder->createField('feed_id', 'integer')
             ->columnName('feed_id')
             ->build();
     }
@@ -49,11 +49,11 @@ class GooglefeedLog extends FormEntity
 
     public function getFeedId()
     {
-        return $this->feedId;
+        return $this->feed_id;
     }
 
     public function setFeedId($id)
     {
-        $this->feedId = $id;
+        $this->feed_id = $id;
     }
 }

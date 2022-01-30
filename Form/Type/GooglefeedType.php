@@ -48,18 +48,18 @@ class GooglefeedType extends AbstractType
         );
 
         $builder->add(
-            'shopId',
+            'store_id',
             TextType::class,
             [
-                'label'      => 'mautic.ecommerce.shopId',
+                'label'      => 'mautic.ecommerce.googlefeed.store_id',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => ['class' => 'form-control'],
-                'required'   => false,
+                'required'   => true,
             ]
         );
 
         $builder->add(
-            'userName',
+            'username',
             TextType::class,
             [
                 'label'      => 'mautic.ecommerce.googlefeed.username',

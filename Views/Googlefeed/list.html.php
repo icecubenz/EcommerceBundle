@@ -49,6 +49,14 @@ if ('index' == $tmpl) {
                         'MauticCoreBundle:Helper:tableheader.html.php',
                         [
                             'sessionVar' => 'googlefeed',
+                            'orderBy'    => 'gf.store_id',
+                            'text'       => 'mautic.ecommerce.googlefeed.store_id',
+                        ]
+                    );
+                    echo $view->render(
+                        'MauticCoreBundle:Helper:tableheader.html.php',
+                        [
+                            'sessionVar' => 'googlefeed',
                             'orderBy'    => 'gf.dateModified',
                             'text'       => 'mautic.ecommerce.date',
                         ]
@@ -97,6 +105,9 @@ if ('index' == $tmpl) {
                         <?php else : ?>
                         <span class="label label-default pa-4">Disabled</span>
                         <?php endif; ?>
+                    </td>
+                    <td class="">
+                        <span><?php echo $item->getStoreId(); ?></span>
                     </td>
                     <td class="">
                         <?php echo $item->getDateAdded()->format('Y-m-d H:i:s'); ?>

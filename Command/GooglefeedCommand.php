@@ -47,10 +47,10 @@ class GooglefeedCommand extends ContainerAwareCommand
             try {
                 $filepath = $this->download(
                     $entity->getUrl(),
-                    $entity->getUserName(),
+                    $entity->getUsername(),
                     $entity->getPassword()
                 );
-                $this->parse($filepath);
+                $this->parse($filepath, $entity->getStoreId());
                 $this->clean($filepath);
                 $this->logSuccess($entity->getId());
             } catch (\Exception $e) {
@@ -110,7 +110,7 @@ class GooglefeedCommand extends ContainerAwareCommand
         return $destination;
     }
 
-    protected function parse($filepath)
+    protected function parse($filepath, $storeId)
     {
         $xml = new \XMLReader();
         $xml->open($filepath, 'UTF-8');
@@ -134,6 +134,7 @@ class GooglefeedCommand extends ContainerAwareCommand
 
             if ($save) {
                 $this->stats['total']++;
+                $entity['store_id'] = (int) $storeId;
                 $this->saveEntity($entity);
             }
         }
@@ -142,12 +143,17 @@ class GooglefeedCommand extends ContainerAwareCommand
     protected function parseItemTag($xmlStr = '')
     {
         $fieldMap = [
-            'id'          => 'product_id',
-            'title'       => 'name',
-            'image_link'  => 'image_url',
-            'link'        => 'url',
-            'price'       => 'price',
-            'description' => 'long_description',
+            'id'                => 'product_id',
+            'title'             => 'name',
+            'price'             => 'price',
+            'sale_price'        => 'sale_price',
+            'image_link'        => 'image_url',
+            'link'              => 'url',
+            'description'       => 'description',
+            'mpn'               => 'mpn',
+            'brand'             => 'brand',
+            'availability'      => 'availability',
+            'availability_date' => 'availability_date',
         ];
 
         $xmlStr = str_replace('g:', '', $xmlStr);
@@ -158,6 +164,9 @@ class GooglefeedCommand extends ContainerAwareCommand
             if (isset($fieldMap[$name])) {
                 $value = (string) $value;
                 $entity[$fieldMap[$name]] = trim($value);
+            }
+            if ($name == 'tax') {
+                $entity['tax_rate'] = (string) $value->rate;
             }
         }
 
@@ -180,7 +189,7 @@ class GooglefeedCommand extends ContainerAwareCommand
 
         $isNew = true;
 
-        $id = $this->getEntityId($data['product_id']);
+        $id = $this->getEntityId($data['product_id'], $data['store_id']);
         if ($id) {
             $entity = $this->productRepo->getEntity($id);
             if ($entity && $entity->getId()) {
@@ -196,10 +205,17 @@ class GooglefeedCommand extends ContainerAwareCommand
         $entity->setDateModified(new \DateTime());
         $entity->setName($data['name']);
         $entity->setProductId($data['product_id']);
+        $entity->setStoreId($data['store_id']);
+        $entity->setPrice($data['price']);
+        $entity->setSalePrice($data['sale_price']);
+        $entity->setTaxRate($data['tax_rate']);
         $entity->setImageUrl($data['image_url']);
         $entity->setUrl($data['url']);
-        $entity->setPrice($data['price']);
-        $entity->setLongDescription($data['long_description']);
+        $entity->setDescription($data['description']);
+        $entity->setMpn($data['mpn']);
+        $entity->setBrand($data['brand']);
+        $entity->setAvailability($data['availability']);
+        $entity->setAvailabilityDate($data['availability_date']);
 
         try {
             $this->productRepo->saveEntity($entity);
@@ -210,12 +226,13 @@ class GooglefeedCommand extends ContainerAwareCommand
         }
     }
 
-    protected function getEntityId($productId)
+    protected function getEntityId($productId, $storeId)
     {
         $q = $this->em->getConnection()->createQueryBuilder();
 
-        $q->select('p.id')->from(MAUTIC_TABLE_PREFIX.'products', 'p');
+        $q->select('p.id')->from(MAUTIC_TABLE_PREFIX.'ecommerce_products', 'p');
         $q->andWhere('p.product_id = :id')->setParameter('id', $productId);
+        $q->andWhere('p.store_id = :store_id')->setParameter('store_id', $storeId);
 
         $results = $q->execute()->fetchAll();
         foreach ($results as $product) {

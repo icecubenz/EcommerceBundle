@@ -31,10 +31,10 @@ echo $view['form']->start($form);
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <?php echo $view['form']->row($form['shopId']); ?>
+                        <?php echo $view['form']->row($form['store_id']); ?>
                     </div>
                     <div class="col-md-4">
-                        <?php echo $view['form']->row($form['userName']); ?>
+                        <?php echo $view['form']->row($form['username']); ?>
                     </div>
                     <div class="col-md-4">
                         <?php echo $view['form']->row($form['password']); ?>
