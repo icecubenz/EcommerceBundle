@@ -14,19 +14,17 @@ class OrderRow
 
     private $product;
 
-    private $productQuantity;
+    private $price = 0;
 
-    private $productPrice;
+    private $price_incl_tax = 0;
 
-    private $idCustomization;
+    private $tax = 0;
 
-    private $unitPriceTaxIncl;
+    private $qty = 0;
 
-    private $unitPriceTaxExcl;
+    private $row_total = 0;
 
-    private $dateAdd;
-
-    private $dateUpd;
+    private $row_total_incl_tax = 0;
 
     public static function loadMetadata(ORM\ClassMetadata $metadata): void
     {
@@ -35,139 +33,64 @@ class OrderRow
         $builder->addId();
 
         $builder
-            ->setTable('order_rows')
+            ->setTable('ecommerce_order_rows')
             ->setCustomRepositoryClass(OrederRowRepository::class)
             ->addIndex(['order_id'], 'order_id_index');
 
-        $builder->createManyToOne('order', 'Order')
+        $builder->createManyToOne('order', Order::class)
             ->inversedBy('orderRows')
             ->addJoinColumn('order_id', 'id', true, false)
             ->build();
 
-        $builder->createManyToOne('product', 'Product')
+        $builder->createManyToOne('product', Product::class)
             ->addJoinColumn('product_id', 'id', true, false)
             ->build();
 
-        $builder->createField('productQuantity', 'float')
-            ->columnName('product_quantity')
+        $builder->createField('price', 'float')
+            ->columnName('price')
             ->build();
 
-
-        $builder->createField('productPrice', 'float')
-            ->columnName('product_price')
+        $builder->createField('price_incl_tax', 'float')
+            ->columnName('price_incl_tax')
             ->build();
 
-        $builder->createField('unitPriceTaxIncl', 'float')
-            ->columnName('unit_price_tax_incl')
+        $builder->createField('tax', 'float')
+            ->columnName('tax')
             ->build();
 
-        $builder->createField('unitPriceTaxExcl', 'float')
-            ->columnName('unit_price_tax_excl')
+        $builder->createField('qty', 'float')
+            ->columnName('qty')
             ->build();
 
-        $builder->createField('dateAdd', 'datetime')
-            ->columnName('date_add')
+        $builder->createField('row_total', 'float')
+            ->columnName('row_total')
             ->build();
 
-        $builder->createField('dateUpd', 'datetime')
-            ->columnName('date_upd')
+        $builder->createField('row_total_incl_tax', 'float')
+            ->columnName('row_total_incl_tax')
             ->build();
     }
 
     public static function loadApiMetadata(ApiMetadataDriver $metadata)
     {
-        $metadata->setGroupPrefix('stat')
-            ->addProperties(
+        $metadata->addProperties(
                 [
-                    'orderId',
+                    'id',
+                    'price',
+                    'price_incl_tax',
+                    'tax',
+                    'qty',
+                    'row_total',
+                    'row_total_incl_tax',
+                    'product',
                 ]
             )
             ->build();
     }
+
     public function getId()
     {
         return $this->id;
-    }
-
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-    public function getProductId()
-    {
-        return $this->product;
-    }
-
-    public function setProduct(Product $product)
-    {
-        $this->product = $product;
-    }
-
-    public function getProductQuantity()
-    {
-        return $this->productQuantity;
-    }
-
-    public function setProductQuantity($productQuantity)
-    {
-        $this->productQuantity = $productQuantity;
-    }
-
-    public function getProductPrice()
-    {
-        return $this->productPrice;
-    }
-
-    public function setProductPrice($productPrice)
-    {
-        $this->productPrice = $productPrice;
-    }
-    public function getIdCustomization()
-    {
-        return $this->idCustomization;
-    }
-
-    public function setIdCustomization($idCustomization)
-    {
-        $this->idCustomization = $idCustomization;
-    }
-    public function getUnitPriceTaxIncl()
-    {
-        return $this->unitPriceTaxIncl;
-    }
-
-    public function setUnitPriceTaxIncl($unitPriceTaxIncl)
-    {
-        $this->unitPriceTaxIncl = $unitPriceTaxIncl;
-    }
-    public function getUnitPriceTaxExcl()
-    {
-        return $this->unitPriceTaxExcl;
-    }
-
-    public function setUnitPriceTaxExcl($unitPriceTaxExcl)
-    {
-        $this->unitPriceTaxExcl = $unitPriceTaxExcl;
-    }
-
-    public function getDateAdd()
-    {
-        return $this->dateAdd;
-    }
-
-    public function setDateAdd($dateAdd)
-    {
-        $this->dateAdd = $dateAdd;
-    }
-
-    public function getDateUpd()
-    {
-        return $this->dateUpd;
-    }
-
-    public function setDateUpd($dateUpd)
-    {
-        $this->dateUpd = $dateUpd;
     }
 
     public function getOrder()
@@ -180,4 +103,73 @@ class OrderRow
         $this->order = $order;
     }
 
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    public function setProduct(Product $product)
+    {
+        $this->product = $product;
+    }
+
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    public function setPrice($val)
+    {
+        $this->price = $val;
+    }
+
+    public function getPriceInclTax()
+    {
+        return $this->price_incl_tax;
+    }
+
+    public function setPriceInclTax($val)
+    {
+        $this->price_incl_tax = $val;
+    }
+
+    public function getTax()
+    {
+        return $this->tax;
+    }
+
+    public function setTax($val)
+    {
+        $this->tax = $val;
+    }
+
+    public function getQty()
+    {
+        return $this->qty;
+    }
+
+    public function setQty($val)
+    {
+        $this->qty = $val;
+    }
+
+    public function getRowTotal()
+    {
+        return $this->row_total;
+    }
+
+    public function setRowTotal($val)
+    {
+        $this->row_total = $val;
+    }
+
+    public function getRowTotalInclTax()
+    {
+        return $this->row_total_incl_tax;
+    }
+
+    public function setRowTotalInclTax($val)
+    {
+        $this->row_total_incl_tax = $val;
+    }
 }

@@ -9,63 +9,37 @@ use Mautic\CoreBundle\Doctrine\Mapping\ClassMetadataBuilder;
 use Mautic\CoreBundle\Entity\FormEntity;
 use Mautic\LeadBundle\Entity\Lead;
 
-
 class Order extends FormEntity
 {
-
     private $id;
 
-    private $orderId;
+    private $store_order_id;
 
-    private $currentState;
+    private $store_id = 0;
 
-    private $payment;
+    private $subtotal = 0;
 
-    private $totalDiscounts;
+    private $subtotal_incl_tax = 0;
 
-    private $totalDiscountsTaxIncl;
+    private $tax = 0;
 
-    private $totalDiscountsTaxExcl;
+    private $discount = 0;
 
-    private $totalPaid;
+    private $discount_incl_tax = 0;
 
-    private $totalPaidTaxIncl;
+    private $shipping = 0;
 
-    private $totalPaidTaxExcl;
+    private $shipping_incl_tax = 0;
 
-    private $totalPaidReal;
+    private $total = 0;
 
-    private $totalProducts;
+    private $total_incl_tax = 0;
 
-    private $totalProductsWt;
-
-    private $totalShipping;
-
-    private $totalShippingTaxIncl;
-
-    private $totalShippingTaxExcl;
-
-    private $reference;
-
-    private $cartId;
-
-    private $shopId;
-
-    private $carrierId;
-
-    private $addressDeliveryId;
-
-    private $addressInvoiceId;
+    private $cart;
 
     private $lead;
 
-    private $gift;
-
     private $orderRows;
-
-    private $productsCount = 0;
-
-    private $type;
 
     public function __construct()
     {
@@ -77,20 +51,60 @@ class Order extends FormEntity
         $builder = new ClassMetadataBuilder($metadata);
 
         $builder
-            ->setTable('orders')
+            ->setTable('ecommerce_orders')
             ->setCustomRepositoryClass(OrderRepository::class)
-            ->addIndex(['order_id'],'orderId')
-            ->addUniqueConstraint(['order_id', 'shop_id'], 'unique_order');
+            ->addIndex(['store_order_id'],'store_order_id')
+            ->addUniqueConstraint(['store_order_id', 'store_id'], 'unique_order');
 
         $builder->addId();
 
         $builder->addLead(true);
 
-        $builder->createField('orderId', 'integer')
-            ->columnName('order_id')
+        $builder->createField('store_order_id', 'integer')
+            ->columnName('store_order_id')
             ->build();
 
-        $builder->createOneToMany('orderRows', 'OrderRow')
+        $builder->createField('store_id', 'integer')
+            ->columnName('store_id')
+            ->build();
+
+        $builder->createField('subtotal', 'float')
+            ->columnName('subtotal')
+            ->build();
+
+        $builder->createField('subtotal_incl_tax', 'float')
+            ->columnName('subtotal_incl_tax')
+            ->build();
+
+        $builder->createField('tax', 'float')
+            ->columnName('tax')
+            ->build();
+
+        $builder->createField('discount', 'float')
+            ->columnName('discount')
+            ->build();
+
+        $builder->createField('discount_incl_tax', 'float')
+            ->columnName('discount_incl_tax')
+            ->build();
+
+        $builder->createField('shipping', 'float')
+            ->columnName('shipping')
+            ->build();
+
+        $builder->createField('shipping_incl_tax', 'float')
+            ->columnName('shipping_incl_tax')
+            ->build();
+
+        $builder->createField('total', 'float')
+            ->columnName('total')
+            ->build();
+
+        $builder->createField('total_incl_tax', 'float')
+            ->columnName('total_incl_tax')
+            ->build();
+
+        $builder->createOneToMany('orderRows', OrderRow::class)
             ->orphanRemoval()
             ->setIndexBy('id')
             ->mappedBy('order')
@@ -98,327 +112,157 @@ class Order extends FormEntity
             ->fetchExtraLazy()
             ->build();
 
-        $builder->createField('currentState', 'integer')
-            ->columnName('current_state')
-            ->build();
-
-        $builder->createField('payment', 'string')
-            ->columnName('payment')
-            ->build();
-
-        $builder->createField('totalDiscounts', 'float')
-            ->columnName('total_discounts')
-            ->build();
-
-        $builder->createField('totalDiscountsTaxIncl', 'float')
-            ->columnName('total_discounts_tax_incl')
-            ->build();
-
-        $builder->createField('totalDiscountsTaxExcl', 'float')
-            ->columnName('total_discounts_tax_excl')
-            ->build();
-
-        $builder->createField('totalPaid', 'float')
-            ->columnName('total_paid')
-            ->build();
-
-        $builder->createField('totalPaidTaxIncl', 'float')
-            ->columnName('total_paid_tax_incl')
-            ->build();
-
-        $builder->createField('totalPaidTaxExcl', 'float')
-            ->columnName('total_paid_tax_excl')
-            ->build();
-
-        $builder->createField('totalPaidReal', 'float')
-            ->columnName('total_paid_real')
-            ->build();
-
-        $builder->createField('totalProducts', 'float')
-            ->columnName('total_products')
-            ->build();
-
-        $builder->createField('totalProductsWt', 'float')
-            ->columnName('total_products_wt')
-            ->build();
-
-        $builder->createField('totalShipping', 'float')
-            ->columnName('total_shipping')
-            ->build();
-
-        $builder->createField('totalShippingTaxIncl', 'float')
-            ->columnName('total_shipping_tax_incl')
-            ->build();
-
-        $builder->createField('totalShippingTaxExcl', 'float')
-            ->columnName('total_shipping_tax_excl')
-            ->build();
-
-        $builder->createField('reference', 'string')
-            ->columnName('reference')
-            ->build();
-
-        $builder->createOneToOne('cartId', Cart::class)
+        $builder->createOneToOne('cart', Cart::class)
             ->inversedBy('order')
             ->addJoinColumn('cart_id', 'id')
-            ->build();
-
-
-        $builder->createField('shopId', 'integer')
-            ->columnName('shop_id')
-            ->build();
-
-        $builder->createField('carrierId', 'integer')
-            ->columnName('carrier_id')
-            ->build();
-
-        $builder->createField('addressDeliveryId', 'integer')
-            ->columnName('address_delivery_id')
-            ->build();
-
-        $builder->createField('addressInvoiceId', 'integer')
-            ->columnName('address_invoice_id')
-            ->build();
-
-        $builder->createField('gift', 'boolean')
-            ->columnName('gift')
             ->build();
     }
 
     public static function loadApiMetadata(ApiMetadataDriver $metadata)
     {
-        $metadata->setGroupPrefix('order')
-            ->addListProperties(
+        $metadata->addProperties(
                 [
-                    'referenceId',
-                ]
-            )
-            ->addProperties(
-                [
+                    'id',
+                    'store_order_id',
+                    'store_id',
+                    'subtotal',
+                    'subtotal_incl_tax',
+                    'tax',
+                    'discount',
+                    'discount_incl_tax',
+                    'shipping',
+                    'shipping_incl_tax',
+                    'total',
+                    'total_incl_tax',
+                    'orderRows',
                 ]
             )
             ->build();
     }
-
 
     public function getId()
     {
         return $this->id;
     }
 
-    public function setId($id)
+    public function getStoreOrderId()
     {
-        $this->id = $id;
+        return $this->store_order_id;
     }
 
-    public function getOrderId()
+    public function setStoreOrderId($id)
     {
-        return $this->orderId;
+        $this->store_order_id = $id;
     }
 
-    public function setOrderId($orderId)
+    public function getStoreId()
     {
-        $this->orderId = $orderId;
+        return $this->store_id;
     }
 
-    public function getCurrentState()
+    public function setStoreId($id)
     {
-        return $this->currentState;
+        $this->store_id = $id;
     }
 
-    public function setCurrentState($currentState)
+    public function getSubtotal()
     {
-        $this->currentState = $currentState;
+        return $this->subtotal;
     }
 
-    public function getPayment()
+    public function setSubtotal($val)
     {
-        return $this->payment;
+        $this->subtotal = $val;
     }
 
-    public function setPayment($payment)
+    public function getSubtotalInclTax()
     {
-        $this->payment = $payment;
+        return $this->subtotal_incl_tax;
     }
 
-    public function getTotalDiscounts()
+    public function setSubtotalInclTax($val)
     {
-        return $this->totalDiscounts;
+        $this->subtotal_incl_tax = $val;
     }
 
-    public function setTotalDiscounts($totalDiscounts)
+    public function getTax()
     {
-        $this->totalDiscounts = $totalDiscounts;
+        return $this->tax;
     }
 
-    public function getTotalDiscountsTaxIncl()
+    public function setTax($val)
     {
-        return $this->totalDiscountsTaxIncl;
+        $this->tax = $val;
     }
 
-    public function setTotalDiscountsTaxIncl($totalDiscountsTaxIncl)
+    public function getDiscount()
     {
-        $this->totalDiscountsTaxIncl = $totalDiscountsTaxIncl;
+        return $this->discount;
     }
 
-    public function getTotalDiscountsTaxExcl()
+    public function setDiscount($val)
     {
-        return $this->totalDiscountsTaxExcl;
+        $this->discount = $val;
     }
 
-    public function setTotalDiscountsTaxExcl($totalDiscountsTaxExcl)
+    public function getDiscountInclTax()
     {
-        $this->totalDiscountsTaxExcl = $totalDiscountsTaxExcl;
+        return $this->discount_incl_tax;
     }
 
-    public function getTotalPaid()
+    public function setDiscountInclTax($val)
     {
-        return $this->totalPaid;
+        $this->discount_incl_tax = $val;
     }
 
-    public function setTotalPaid($totalPaid)
+    public function getShipping()
     {
-        $this->totalPaid = $totalPaid;
+        return $this->shipping;
     }
 
-    public function getTotalPaidTaxIncl()
+    public function setShipping($val)
     {
-        return $this->totalPaidTaxIncl;
+        $this->shipping = $val;
     }
 
-    public function setTotalPaidTaxIncl($totalPaidTaxIncl)
+    public function getShippingInclTax()
     {
-        $this->totalPaidTaxIncl = $totalPaidTaxIncl;
+        return $this->shipping_incl_tax;
     }
 
-    public function getTotalPaidTaxExcl()
+    public function setShippingInclTax($val)
     {
-        return $this->totalPaidTaxExcl;
+        $this->shipping_incl_tax = $val;
     }
 
-    public function setTotalPaidTaxExcl($totalPaidTaxExcl)
+    public function getTotal()
     {
-        $this->totalPaidTaxExcl = $totalPaidTaxExcl;
+        return $this->total;
     }
 
-    public function getTotalPaidReal()
+    public function setTotal($val)
     {
-        return $this->totalPaidReal;
+        $this->total = $val;
     }
 
-    public function setTotalPaidReal($totalPaidReal)
+    public function getTotalInclTax()
     {
-        $this->totalPaidReal = $totalPaidReal;
+        return $this->total_incl_tax;
     }
 
-    public function getTotalProducts()
+    public function setTotalInclTax($val)
     {
-        return $this->totalProducts;
+        $this->total_incl_tax = $val;
     }
 
-    public function setTotalProducts($totalProducts)
+    public function getCart()
     {
-        $this->totalProducts = $totalProducts;
+        return $this->cart;
     }
 
-    public function getTotalProductsWt()
+    public function setCart(Cart $cart)
     {
-        return $this->totalProductsWt;
-    }
-
-    public function setTotalProductsWt($totalProductsWt)
-    {
-        $this->totalProductsWt = $totalProductsWt;
-    }
-
-    public function getTotalShipping()
-    {
-        return $this->totalShipping;
-    }
-
-    public function setTotalShipping($totalShipping)
-    {
-        $this->totalShipping = $totalShipping;
-    }
-
-    public function getTotalShippingTaxIncl()
-    {
-        return $this->totalShippingTaxIncl;
-    }
-
-    public function setTotalShippingTaxIncl($totalShippingTaxIncl)
-    {
-        $this->totalShippingTaxIncl = $totalShippingTaxIncl;
-    }
-
-    public function getTotalShippingTaxExcl()
-    {
-        return $this->totalShippingTaxExcl;
-    }
-
-    public function setTotalShippingTaxExcl($totalShippingTaxExcl)
-    {
-        $this->totalShippingTaxExcl = $totalShippingTaxExcl;
-    }
-
-    public function getReference()
-    {
-        return $this->reference;
-    }
-
-    public function setReference($reference)
-    {
-        $this->reference = $reference;
-    }
-
-    public function getCartId()
-    {
-        return $this->cartId;
-    }
-
-    public function setCartId(Cart $cartId)
-    {
-        $this->cartId = $cartId;
-    }
-
-    public function getShopId()
-    {
-        return $this->shopId;
-    }
-
-    public function setShopId($shopId)
-    {
-        $this->shopId = $shopId;
-    }
-
-    public function getCarrierId()
-    {
-        return $this->carrierId;
-    }
-
-    public function setCarrierId($carrierId)
-    {
-        $this->carrierId = $carrierId;
-    }
-
-    public function getAddressDeliveryId()
-    {
-        return $this->addressDeliveryId;
-    }
-
-    public function setAddressDeliveryId($addressDeliveryId)
-    {
-        $this->addressDeliveryId = $addressDeliveryId;
-    }
-
-    public function getAddressInvoiceId()
-    {
-        return $this->addressInvoiceId;
-    }
-
-    public function setAddressInvoiceId($addressInvoiceId)
-    {
-        $this->addressInvoiceId = $addressInvoiceId;
+        $this->cart = $cart;
     }
 
     public function getLead()
@@ -426,19 +270,9 @@ class Order extends FormEntity
         return $this->lead;
     }
 
-    public function setLead($lead)
+    public function setLead(Lead $lead)
     {
         $this->lead = $lead;
-    }
-
-    public function getGift()
-    {
-        return $this->gift;
-    }
-
-    public function setGift($gift)
-    {
-        $this->gift = $gift;
     }
 
     public function getOrderRows()
@@ -449,32 +283,10 @@ class Order extends FormEntity
     public function addOrderRow(OrderRow $orderRow)
     {
         $this->orderRows[] = $orderRow;
-        return $this;
     }
 
     public function setOrderRows($orderRows)
     {
         $this->orderRows = $orderRows;
     }
-
-    public function getProductsCount()
-    {
-        return $this->productsCount;
-    }
-
-    public function setProductsCount($productsCount)
-    {
-        $this->productsCount = $productsCount;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
 }

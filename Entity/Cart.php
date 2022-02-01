@@ -12,30 +12,23 @@ use Mautic\LeadBundle\Entity\Lead;
 
 class Cart extends FormEntity
 {
-
     private $id;
 
-    private $cartId;
+    private $store_cart_id;
 
-    private $cartUrl;
+    private $store_id = 0;
 
-    private $shopId;
+    private $cart_url;
 
-    private $carrierId;
+    private $total = 0;
 
-    private $addressDeliveryId;
+    private $total_incl_tax = 0;
 
-    private $addressInvoiceId;
+    private $tax = 0;
 
     private $lead;
 
-    private $gift;
-
     private $cartLines;
-
-    private $productsCount = 0;
-
-    private $type;
 
     private $order;
 
@@ -49,33 +42,41 @@ class Cart extends FormEntity
         $builder = new ClassMetadataBuilder($metadata);
 
         $builder
-            ->setTable('carts')
+            ->setTable('ecommerce_carts')
             ->setCustomRepositoryClass(CartRepository::class)
-            ->addIndex(['cart_id'],'cartId')
-            ->addUniqueConstraint(['cart_id', 'shop_id'], 'unique_cart');
+            ->addIndex(['store_cart_id'],'store_cart_id')
+            ->addUniqueConstraint(['store_cart_id', 'store_id'], 'unique_cart');
 
         $builder->addId();
 
         $builder->addLead(true);
 
-        $builder->createField('cartId', 'integer')
-            ->columnName('cart_id')
+        $builder->createField('store_cart_id', 'integer')
+            ->columnName('store_cart_id')
+            ->build();
+        
+        $builder->createField('store_id', 'integer')
+            ->columnName('store_id')
             ->build();
 
-        $builder->createField('cartUrl', 'text')
+        $builder->createField('cart_url', 'text')
             ->columnName('cart_url')
             ->nullable()
             ->build();
 
-        $builder->createField('shopId', 'integer')
-            ->columnName('shop_id')
+        $builder->createField('total', 'float')
+            ->columnName('total')
             ->build();
 
-        $builder->createField('carrierId', 'integer')
-            ->columnName('carrier_id')
+        $builder->createField('total_incl_tax', 'float')
+            ->columnName('total_incl_tax')
             ->build();
 
-        $builder->createOneToMany('cartLines', 'CartLine')
+        $builder->createField('tax', 'float')
+            ->columnName('tax')
+            ->build();
+
+        $builder->createOneToMany('cartLines', CartLine::class)
             ->orphanRemoval()
             ->setIndexBy('id')
             ->mappedBy('cart')
@@ -83,17 +84,8 @@ class Cart extends FormEntity
             ->fetchExtraLazy()
             ->build();
 
-        $builder->createField('addressDeliveryId', 'integer')
-            ->columnName('address_delivery_id')
-            ->build();
-
-        $builder->createField('addressInvoiceId', 'integer')
-            ->columnName('address_invoice_id')
-            ->build();
-
         $builder->createOneToOne('order', Order::class)
-            ->mappedBy('cartId')
-            //->addJoinColumn('order', 'id', true, false)
+            ->mappedBy('cart')
             ->fetchExtraLazy()
             ->cascadeAll()
             ->build();
@@ -101,14 +93,16 @@ class Cart extends FormEntity
 
     public static function loadApiMetadata(ApiMetadataDriver $metadata)
     {
-        $metadata->setGroupPrefix('cart')
-            ->addListProperties(
+        $metadata->addProperties(
                 [
-                    'referenceId',
-                ]
-            )
-            ->addProperties(
-                [
+                    'id',
+                    'store_cart_id',
+                    'store_id',
+                    'cart_url',
+                    'total',
+                    'total_incl_tax',
+                    'tax',
+                    'cartLines',
                 ]
             )
             ->build();
@@ -119,49 +113,75 @@ class Cart extends FormEntity
         return $this->id;
     }
 
+    public function getStoreCartId()
+    {
+        return $this->store_cart_id;
+    }
+
+    public function setStoreCartId($id)
+    {
+        $this->store_cart_id = $id;
+    }
+
+    public function getStoreId()
+    {
+        return $this->store_id;
+    }
+
+    public function setStoreId($id)
+    {
+        $this->store_id = $id;
+    }
+
+    public function getCartUrl()
+    {
+        return $this->cart_url;
+    }
+
+    public function setCartUrl($url)
+    {
+        $this->cart_url = $url;
+    }
+
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    public function setTotal($value)
+    {
+        $this->total = $value;
+    }
+
+    public function getTotalInclTax()
+    {
+        return $this->total_incl_tax;
+    }
+
+    public function setTotalInclTax($value)
+    {
+        $this->total_incl_tax = $value;
+    }
+
+    public function getTax()
+    {
+        return $this->tax;
+    }
+
+    public function setTax($value)
+    {
+        $this->tax = $value;
+    }
+
     public function getLead()
     {
         return $this->lead;
     }
 
-
     public function setLead(Lead $lead)
     {
         $this->lead = $lead;
-
-        return $this;
     }
-
-    public function getCartId()
-    {
-        return $this->cartId;
-    }
-
-    public function setCartId($cartId)
-    {
-        $this->cartId = $cartId;
-    }
-
-    public function getCartUrl()
-    {
-        return $this->cartUrl;
-    }
-
-    public function setCartUrl($url)
-    {
-        $this->cartUrl = $url;
-    }
-
-    public function getShopId()
-    {
-        return $this->shopId;
-    }
-
-    public function setShopId($shopId)
-    {
-        $this->shopId = $shopId;
-    }
-
 
     public function clearCartLines()
     {
@@ -176,68 +196,6 @@ class Cart extends FormEntity
     public function addCartLine(CartLine $cartLine)
     {
         $this->cartLines[] = $cartLine;
-        return $this;
-    }
-
-    public function getCarrierId()
-    {
-        return $this->carrierId;
-    }
-
-    public function setCarrierId($carrierId)
-    {
-        $this->carrierId = $carrierId;
-    }
-
-    public function getAddressDeliveryId()
-    {
-        return $this->addressDeliveryId;
-    }
-
-    public function setAddressDeliveryId($addressDeliveryId)
-    {
-        $this->addressDeliveryId = $addressDeliveryId;
-    }
-
-    public function getAddressInvoiceId()
-    {
-        return $this->addressInvoiceId;
-    }
-
-    public function setAddressInvoiceId($addressInvoiceId)
-    {
-        $this->addressInvoiceId = $addressInvoiceId;
-    }
-
-    public function getGift()
-    {
-        return $this->gift;
-    }
-
-    public function setGift($gift)
-    {
-        $this->gift = $gift;
-    }
-
-    public function getProductsCount()
-    {
-        return count($this->getCartLines());
-    }
-
-    public function getTotal()
-    {
-        $total = 0;
-        foreach ($this->getCartLines() as $cartLine)
-        {
-            $total = $total + (float)$cartLine->getProduct()->getPrice() * (float)$cartLine->getQuantity();
-        }
-
-        return $total;
-    }
-
-    public function getType()
-    {
-        return $this->type;
     }
 
     public function setOrder(Order $order)
@@ -249,5 +207,4 @@ class Cart extends FormEntity
     {
         return $this->order;
     }
-
 }

@@ -14,11 +14,7 @@ class CartLine
 
     private $product;
 
-    private $quantity;
-
-    private $dateAdd;
-
-    private $dateUpd;
+    private $qty;
 
     public static function loadMetadata(ORM\ClassMetadata $metadata): void
     {
@@ -27,41 +23,32 @@ class CartLine
         $builder->addId();
 
         $builder
-            ->setTable('cart_lines')
+            ->setTable('ecommerce_cart_lines')
             ->setCustomRepositoryClass(CartLineRepository::class)
-            ->addIndex(['cart_id'], 'cart_id_index')
+            ->addIndex(['cart_id'], 'cart_id')
             ->addUniqueConstraint(['cart_id','product_id'], 'unique_cart_line');
 
-        $builder->createManyToOne('cart', 'Cart')
+        $builder->createManyToOne('cart', Cart::class)
             ->inversedBy('cartLines')
             ->addJoinColumn('cart_id', 'id', true, false)
             ->build();
 
-
-        $builder->createManyToOne('product', 'Product')
+        $builder->createManyToOne('product', Product::class)
             ->addJoinColumn('product_id', 'id', true, false)
             ->build();
 
-
-        $builder->createField('quantity', 'integer')
-            ->columnName('quantity')
-            ->build();
-
-        $builder->createField('dateAdd', 'datetime')
-            ->columnName('date_add')
-            ->build();
-
-        $builder->createField('dateUpd', 'datetime')
-            ->columnName('date_upd')
+        $builder->createField('qty', 'float')
+            ->columnName('qty')
             ->build();
     }
 
     public static function loadApiMetadata(ApiMetadataDriver $metadata)
     {
-        $metadata->setGroupPrefix('stat')
-            ->addProperties(
+        $metadata->addProperties(
                 [
-                    'cartId',
+                    'id',
+                    'qty',
+                    'product',
                 ]
             )
             ->build();
@@ -92,35 +79,13 @@ class CartLine
         $this->product = $product;
     }
 
-
-    public function getQuantity()
+    public function getQty()
     {
-        return $this->quantity;
+        return $this->qty;
     }
 
-    public function setQuantity($quantity)
+    public function setQty($qty)
     {
-        $this->quantity = $quantity;
+        $this->qty = $qty;
     }
-
-    public function getDateAdd()
-    {
-        return $this->dateAdd;
-    }
-
-    public function setDateAdd($dateAdd)
-    {
-        $this->dateAdd = $dateAdd;
-    }
-
-    public function getDateUpd()
-    {
-        return $this->dateUpd;
-    }
-
-    public function setDateUpd($dateUpd)
-    {
-        $this->dateUpd = $dateUpd;
-    }
-
 }
