@@ -72,11 +72,23 @@ return array(
             ],
         ],
         'api' => [
-            'mautic_api_productstandard' => [
+            'mautic_api_productsstandard' => [
                 'standard_entity' => true,
-                'name'            => 'product',
-                'path'            => '/product',
+                'name'            => 'products',
+                'path'            => '/products',
                 'controller'      => 'EcommerceBundle:Api\ProductApi',
+            ],
+            'mautic_api_cartsstandard' => [
+                'standard_entity' => true,
+                'name'            => 'carts',
+                'path'            => '/carts',
+                'controller'      => 'EcommerceBundle:Api\CartApi',
+            ],
+            'mautic_api_ordersstandard' => [
+                'standard_entity' => true,
+                'name'            => 'orders',
+                'path'            => '/orders',
+                'controller'      => 'EcommerceBundle:Api\OrderApi',
             ],
         ],
     ],
