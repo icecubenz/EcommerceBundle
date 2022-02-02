@@ -2,11 +2,10 @@
 
 namespace MauticPlugin\EcommerceBundle\Controller\Api;
 
-use Mautic\ApiBundle\Controller\CommonApiController;
 use MauticPlugin\EcommerceBundle\Entity\Order;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
-class OrderApiController extends CommonApiController
+class OrderApiController extends DisabledApiController
 {
     const MODEL_ID = 'order.order';
 

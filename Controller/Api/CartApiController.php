@@ -2,11 +2,10 @@
 
 namespace MauticPlugin\EcommerceBundle\Controller\Api;
 
-use Mautic\ApiBundle\Controller\CommonApiController;
 use MauticPlugin\EcommerceBundle\Entity\Cart;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
-class CartApiController extends CommonApiController
+class CartApiController extends DisabledApiController
 {
     const MODEL_ID = 'cart.cart';
 
